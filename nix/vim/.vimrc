@@ -37,3 +37,13 @@ if &term =~ '256color'
   " Disable Background Color Erase (BCE) so that color schemes render properly when inside 256-color tmux and GNU screen. See also http://snk.tuxfamily.org/log/vim-256color-bce.html
   set t_ut=
 endif
+
+" * and # search for next/previous of selected text when used in visual mode
+xno * :<c-u>cal<SID>VisualSearch()<cr>/<cr>
+xno # :<c-u>cal<SID>VisualSearch()<cr>?<cr>
+
+fun! s:VisualSearch()
+  let old = @" | norm! gvy
+  let @/ = '\V'.substitute(escape(@", '\'), '\n', '\\n', 'g')
+  let @" = old
+endf
